@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sport Smart! — Australian Curriculum Game</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════════════════ START SCREEN -->
+  <div id="screen-start">
+    <div>
+      <h1 class="game-title">⚡ Sport Smart!</h1>
+      <p class="game-subtitle">Australian Curriculum Learning Game · Years F–6</p>
+    </div>
+
+    <!-- Sport picker -->
+    <div class="card">
+      <p class="section-label">🏆 Choose your sport</p>
+      <div class="sport-grid">
+        <div class="sport-card" data-sport="bike">
+          <span class="sport-icon">🏍️</span>
+          <span class="sport-name">Dirt Bikes</span>
+        </div>
+        <div class="sport-card" data-sport="basketball">
+          <span class="sport-icon">🏀</span>
+          <span class="sport-name">Basketball</span>
+        </div>
+        <div class="sport-card" data-sport="football">
+          <span class="sport-icon">🏉</span>
+          <span class="sport-name">AFL Football</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year level picker -->
+    <div class="card">
+      <p class="section-label">📚 Choose your year level</p>
+      <div class="btn-row">
+        <button class="year-btn" data-year="f2">Foundation–Year 2<br><small style="font-weight:400">Ages 5–8</small></button>
+        <button class="year-btn" data-year="34">Year 3–4<br><small style="font-weight:400">Ages 8–10</small></button>
+        <button class="year-btn" data-year="56">Year 5–6<br><small style="font-weight:400">Ages 10–12</small></button>
+      </div>
+    </div>
+
+    <!-- Subject picker -->
+    <div class="card">
+      <p class="section-label">🎯 Choose your subject</p>
+      <div class="btn-row">
+        <button class="subject-btn" data-subject="maths">🔢 Maths</button>
+        <button class="subject-btn" data-subject="english">📖 English</button>
+        <button class="subject-btn" data-subject="stem">🔬 STEM</button>
+      </div>
+    </div>
+
+    <p id="start-warning" hidden>Please choose a sport, year level and subject first!</p>
+    <button class="btn-play" id="btn-play">▶ PLAY!</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ GAME SCREEN -->
+  <div id="screen-game" hidden>
+
+    <!-- Header -->
+    <div class="game-header">
+      <span class="hdr-pill" id="hdr-level">Level 1</span>
+      <span id="hdr-q">Q 1/5</span>
+      <span class="hdr-pill" id="hdr-score">Score: 0</span>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Character stage — only the .active wrap is visible via CSS -->
+    <div class="character-stage">
+
+      <!-- ──────────────────────────── DIRTBIKE CHARACTER -->
+      <div class="character-wrap" data-sport="bike">
+        <svg viewBox="0 0 220 155" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="b-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5BA8D8"/><stop offset="100%" stop-color="#AADAF0"/>
+            </linearGradient>
+            <linearGradient id="b-gnd" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C49A3C"/><stop offset="100%" stop-color="#8B6014"/>
+            </linearGradient>
+            <linearGradient id="b-frame" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FF8C00"/><stop offset="100%" stop-color="#CC4400"/>
+            </linearGradient>
+            <linearGradient id="b-tank" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FF6000"/><stop offset="100%" stop-color="#CC3000"/>
+            </linearGradient>
+            <linearGradient id="b-helmet" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#E82020"/><stop offset="100%" stop-color="#9A0000"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Sky -->
+          <rect width="220" height="112" fill="url(#b-sky)" rx="10 10 0 0"/>
+          <!-- Clouds -->
+          <ellipse cx="160" cy="28" rx="22" ry="9" fill="white" opacity="0.7"/>
+          <ellipse cx="175" cy="25" rx="14" ry="8" fill="white" opacity="0.7"/>
+          <ellipse cx="148" cy="26" rx="12" ry="7" fill="white" opacity="0.6"/>
+          <ellipse cx="35" cy="20" rx="16" ry="7" fill="white" opacity="0.5"/>
+          <ellipse cx="48" cy="18" rx="10" ry="6" fill="white" opacity="0.5"/>
+          <!-- Ground -->
+          <path d="M0,112 Q55,106 110,112 Q165,118 220,112 L220,155 L0,155 Z" fill="url(#b-gnd)"/>
+          <!-- Ground texture line -->
+          <path d="M0,112 Q55,106 110,112 Q165,118 220,112" fill="none" stroke="#7A5010" stroke-width="2"/>
+
+          <!-- Rear wheel -->
+          <circle cx="62" cy="116" r="24" fill="#1A1A1A"/>
+          <circle cx="62" cy="116" r="20" fill="none" stroke="#2D2D2D" stroke-width="4.5"/>
+          <circle cx="62" cy="116" r="13" fill="#252525"/>
+          <line x1="62" y1="96" x2="62" y2="136" stroke="#555" stroke-width="1.5"/>
+          <line x1="42" y1="116" x2="82" y2="116" stroke="#555" stroke-width="1.5"/>
+          <line x1="48" y1="102" x2="76" y2="130" stroke="#555" stroke-width="1.5"/>
+          <line x1="48" y1="130" x2="76" y2="102" stroke="#555" stroke-width="1.5"/>
+          <line x1="55" y1="96" x2="69" y2="136" stroke="#444" stroke-width="1"/>
+          <line x1="42" y1="109" x2="82" y2="123" stroke="#444" stroke-width="1"/>
+          <circle cx="62" cy="116" r="5" fill="#666"/>
+
+          <!-- Front wheel -->
+          <circle cx="162" cy="118" r="21" fill="#1A1A1A"/>
+          <circle cx="162" cy="118" r="17" fill="none" stroke="#2D2D2D" stroke-width="4"/>
+          <circle cx="162" cy="118" r="11" fill="#252525"/>
+          <line x1="162" y1="101" x2="162" y2="135" stroke="#555" stroke-width="1.5"/>
+          <line x1="145" y1="118" x2="179" y2="118" stroke="#555" stroke-width="1.5"/>
+          <line x1="150" y1="106" x2="174" y2="130" stroke="#555" stroke-width="1.5"/>
+          <line x1="150" y1="130" x2="174" y2="106" stroke="#555" stroke-width="1.5"/>
+          <circle cx="162" cy="118" r="4.5" fill="#666"/>
+
+          <!-- Swingarm -->
+          <path d="M62,116 L84,100" stroke="#3A3A3A" stroke-width="6" stroke-linecap="round" fill="none"/>
+
+          <!-- Main frame -->
+          <path d="M84,100 L95,63 L120,58 L140,70 L132,100 Z" fill="url(#b-frame)" stroke="#B33A00" stroke-width="1.5"/>
+          <!-- Sub-frame -->
+          <path d="M95,63 L84,100 L98,96 L108,68 Z" fill="#D96000" stroke="#B33A00" stroke-width="1"/>
+
+          <!-- Engine block -->
+          <rect x="93" y="76" width="31" height="22" rx="4" fill="#2A2A2A" stroke="#1A1A1A" stroke-width="1.5"/>
+          <rect x="97" y="80" width="10" height="7" rx="2" fill="#3D3D3D"/>
+          <rect x="110" y="80" width="10" height="7" rx="2" fill="#3D3D3D"/>
+          <line x1="97" y1="90" x2="122" y2="90" stroke="#444" stroke-width="1"/>
+          <line x1="97" y1="93" x2="122" y2="93" stroke="#444" stroke-width="1"/>
+
+          <!-- Exhaust -->
+          <path d="M95,96 Q77,108 67,118 Q57,128 47,126" fill="none" stroke="#444" stroke-width="4" stroke-linecap="round"/>
+          <path d="M95,96 Q77,110 67,120 Q57,130 47,128" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round"/>
+          <!-- Exhaust puff -->
+          <ellipse cx="42" cy="128" rx="7" ry="4" fill="#A0A0A0" opacity="0.4"/>
+
+          <!-- Fork legs -->
+          <line x1="126" y1="65" x2="148" y2="104" stroke="#3A3A3A" stroke-width="5" stroke-linecap="round"/>
+          <line x1="133" y1="66" x2="156" y2="106" stroke="#3A3A3A" stroke-width="4" stroke-linecap="round"/>
+
+          <!-- Gas tank -->
+          <path d="M99,63 Q114,55 130,61 L128,73 L99,73 Z" fill="url(#b-tank)" stroke="#A03000" stroke-width="1"/>
+          <path d="M104,64 Q117,57 127,62" fill="none" stroke="#FF8040" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+
+          <!-- Seat -->
+          <path d="M83,67 Q96,61 118,61 L122,67 L85,69 Z" fill="#111" stroke="#333" stroke-width="1"/>
+
+          <!-- Number plate -->
+          <path d="M123,66 L136,68 L134,81 L121,79 Z" fill="white" stroke="#DDD" stroke-width="1"/>
+          <text x="124" y="77" font-size="8" fill="#111" font-weight="bold" font-family="Arial, sans-serif">47</text>
+
+          <!-- Handlebar -->
+          <line x1="126" y1="59" x2="136" y2="51" stroke="#333" stroke-width="4.5" stroke-linecap="round"/>
+          <rect x="131" y="47" width="12" height="5" rx="2.5" fill="#222"/>
+
+          <!-- Rider lower legs / boots -->
+          <path d="M95,90 L87,108 L83,116 L92,114 L96,108 Z" fill="#2A4494" stroke="#1A3478" stroke-width="1"/>
+          <path d="M83,114 Q82,122 90,122 L94,116 Z" fill="#C8A020" stroke="#A08010" stroke-width="1"/>
+
+          <!-- Rider torso (jersey) -->
+          <path d="M89,59 Q87,72 89,90 Q97,95 106,90 Q110,74 108,59 Z" fill="#3060CC" stroke="#2050BB" stroke-width="1.5"/>
+          <path d="M89,68 L108,66" stroke="white" stroke-width="2" opacity="0.5"/>
+          <text x="93" y="82" font-size="9" fill="white" font-weight="bold" font-family="Arial, sans-serif">4</text>
+
+          <!-- Rider arms -->
+          <path d="M89,68 Q77,74 75,80" stroke="#3060CC" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M108,66 Q122,60 130,56" stroke="#3060CC" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <circle cx="74" cy="81" r="5" fill="#222"/>
+          <circle cx="131" cy="55" r="5" fill="#222"/>
+
+          <!-- Rider helmet -->
+          <ellipse cx="98" cy="50" rx="14" ry="12" fill="url(#b-helmet)"/>
+          <path d="M85,50 Q98,40 111,50" fill="#8B0000"/>
+          <!-- Visor -->
+          <path d="M87,53 Q98,63 109,53 L107,50 Q98,59 89,50 Z" fill="#A8D8F0" stroke="#5B9FCC" stroke-width="1" opacity="0.85"/>
+          <path d="M87,53 Q98,63 109,53" fill="none" stroke="#CC2800" stroke-width="1.5"/>
+          <!-- Chin guard -->
+          <path d="M88,58 Q98,64 108,58 Q108,65 98,65 Q88,65 88,58 Z" fill="#CC2000"/>
+          <!-- Helmet top vent -->
+          <line x1="95" y1="39" x2="101" y2="39" stroke="#AA1010" stroke-width="2" stroke-linecap="round"/>
+          <line x1="93" y1="42" x2="103" y2="42" stroke="#AA1010" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Speed lines -->
+          <line x1="5" y1="78" x2="30" y2="78" stroke="#FF7A00" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+          <line x1="3" y1="88" x2="24" y2="88" stroke="#FF7A00" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+          <line x1="7" y1="98" x2="25" y2="98" stroke="#FF7A00" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+          <line x1="2" y1="68" x2="18" y2="68" stroke="#FFA020" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+
+          <!-- Dust cloud -->
+          <ellipse cx="40" cy="128" rx="18" ry="6" fill="#D4AF6A" opacity="0.65"/>
+          <ellipse cx="28" cy="122" rx="11" ry="5" fill="#E0C888" opacity="0.45"/>
+          <ellipse cx="18" cy="117" rx="7" ry="4" fill="#F0D898" opacity="0.3"/>
+          <circle cx="14" cy="120" r="2" fill="#D4AF6A" opacity="0.35"/>
+          <circle cx="34" cy="120" r="2.5" fill="#D4AF6A" opacity="0.3"/>
+        </svg>
+        <span class="character-label">Ride it! 🏍️</span>
+      </div>
+
+      <!-- ──────────────────────────── BASKETBALL CHARACTER -->
+      <div class="character-wrap" data-sport="basketball">
+        <svg viewBox="0 0 220 155" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bb-bg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#18183A"/><stop offset="100%" stop-color="#2A2A58"/>
+            </linearGradient>
+            <linearGradient id="bb-court" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#C88010"/><stop offset="100%" stop-color="#9A5E08"/>
+            </linearGradient>
+            <radialGradient id="bb-ball" cx="36%" cy="30%" r="64%">
+              <stop offset="0%" stop-color="#FFAA40"/><stop offset="55%" stop-color="#E87010"/><stop offset="100%" stop-color="#B04800"/>
+            </radialGradient>
+            <linearGradient id="bb-skin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F5C890"/><stop offset="100%" stop-color="#D4A062"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Arena / dark background -->
+          <rect width="220" height="110" fill="url(#bb-bg)" rx="10 10 0 0"/>
+          <!-- Crowd suggestion rows -->
+          <rect x="0" y="78" width="220" height="32" fill="#22224A" opacity="0.6"/>
+          <!-- Crowd dots -->
+          <circle cx="12" cy="88" r="4" fill="#3A3A6A" opacity="0.7"/>
+          <circle cx="22" cy="84" r="4" fill="#4A4A7A" opacity="0.7"/>
+          <circle cx="32" cy="90" r="4" fill="#3A3A6A" opacity="0.6"/>
+          <circle cx="42" cy="85" r="4" fill="#4A4A7A" opacity="0.7"/>
+          <circle cx="8" cy="94" r="3" fill="#3A3A6A" opacity="0.5"/>
+          <circle cx="190" cy="87" r="4" fill="#3A3A6A" opacity="0.7"/>
+          <circle cx="200" cy="82" r="4" fill="#4A4A7A" opacity="0.6"/>
+          <circle cx="210" cy="88" r="4" fill="#3A3A6A" opacity="0.7"/>
+          <!-- Arena lights -->
+          <ellipse cx="40" cy="10" rx="10" ry="8" fill="white" opacity="0.06"/>
+          <ellipse cx="180" cy="8" rx="10" ry="8" fill="white" opacity="0.06"/>
+
+          <!-- Court floor -->
+          <rect y="110" width="220" height="45" fill="url(#bb-court)"/>
+          <!-- Floor boards -->
+          <line x1="0" y1="117" x2="220" y2="117" stroke="#A06808" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="124" x2="220" y2="124" stroke="#A06808" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="131" x2="220" y2="131" stroke="#A06808" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="138" x2="220" y2="138" stroke="#A06808" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="145" x2="220" y2="145" stroke="#A06808" stroke-width="1" opacity="0.5"/>
+          <!-- Court-floor seam line -->
+          <line x1="0" y1="110" x2="220" y2="110" stroke="white" stroke-width="2.5"/>
+          <!-- Paint / lane lines -->
+          <rect x="74" y="110" width="62" height="45" fill="none" stroke="white" stroke-width="1.5" opacity="0.35"/>
+          <!-- 3-point arc (suggestion) -->
+          <path d="M30,155 Q105,68 190,155" fill="none" stroke="white" stroke-width="1.5" opacity="0.3"/>
+
+          <!-- Backboard support pole -->
+          <rect x="181" y="48" width="7" height="62" fill="#5A6070"/>
+          <line x1="160" y1="22" x2="182" y2="48" stroke="#5A6070" stroke-width="6" stroke-linecap="round"/>
+          <!-- Backboard -->
+          <rect x="155" y="10" width="52" height="38" rx="3" fill="white" stroke="#B0B0B0" stroke-width="2"/>
+          <!-- Backboard target square -->
+          <rect x="168" y="16" width="28" height="22" rx="1" fill="none" stroke="#FF4444" stroke-width="2.5"/>
+          <!-- Backboard branding stripe -->
+          <rect x="155" y="10" width="52" height="6" rx="3 3 0 0" fill="#E8E8E8"/>
+
+          <!-- Rim bracket -->
+          <rect x="161" y="46" width="5" height="9" fill="#888"/>
+          <!-- Rim (3D ellipse) -->
+          <ellipse cx="152" cy="54" rx="17" ry="4.5" fill="none" stroke="#E83030" stroke-width="4"/>
+          <!-- Rim highlight -->
+          <path d="M138,52 Q152,47 166,52" fill="none" stroke="#FF8080" stroke-width="1.5" opacity="0.5"/>
+
+          <!-- Net -->
+          <path d="M135,55 Q141,70 144,80 Q152,85 160,80 Q163,70 169,55" fill="none" stroke="#DDD" stroke-width="1.5" opacity="0.8"/>
+          <line x1="138" y1="56" x2="136" y2="78" stroke="#DDD" stroke-width="1" opacity="0.6"/>
+          <line x1="144" y1="56" x2="143" y2="80" stroke="#DDD" stroke-width="1" opacity="0.6"/>
+          <line x1="152" y1="56" x2="152" y2="82" stroke="#DDD" stroke-width="1" opacity="0.6"/>
+          <line x1="160" y1="56" x2="161" y2="80" stroke="#DDD" stroke-width="1" opacity="0.6"/>
+          <line x1="166" y1="56" x2="168" y2="77" stroke="#DDD" stroke-width="1" opacity="0.6"/>
+          <path d="M136,66 Q152,71 168,66" fill="none" stroke="#DDD" stroke-width="1" opacity="0.45"/>
+          <path d="M137,74 Q152,79 167,74" fill="none" stroke="#DDD" stroke-width="1" opacity="0.35"/>
+
+          <!-- Player shadow -->
+          <ellipse cx="76" cy="118" rx="30" ry="7" fill="#6A4000" opacity="0.45"/>
+
+          <!-- Player left leg (behind, straight) -->
+          <path d="M66,91 L58,112 L56,132 L66,132 L68,112 L72,93 Z" fill="#2D0060" stroke="#1E0045" stroke-width="1"/>
+          <!-- Left shoe -->
+          <path d="M53,130 Q55,140 67,140 Q71,140 71,135 L65,130 Z" fill="#111" stroke="#222" stroke-width="1"/>
+          <path d="M53,138 L71,138" stroke="#444" stroke-width="1"/>
+
+          <!-- Player right leg (bent/raised) -->
+          <path d="M76,88 L88,72 L96,68 L100,76 L90,82 L84,96 Z" fill="#2D0060" stroke="#1E0045" stroke-width="1"/>
+          <!-- Right shoe -->
+          <path d="M92,66 Q102,61 107,69 Q104,76 95,74 Z" fill="#111" stroke="#222" stroke-width="1"/>
+          <path d="M92,72 L107,72" stroke="#444" stroke-width="1"/>
+
+          <!-- Player jersey -->
+          <path d="M60,64 Q58,77 62,93 Q70,99 82,95 Q90,82 88,64 Z" fill="#C8102E" stroke="#A00025" stroke-width="1.5"/>
+          <!-- Jersey shoulder yoke -->
+          <path d="M60,64 Q74,58 88,64" fill="white" stroke="#DDD" stroke-width="1" opacity="0.7"/>
+          <!-- Jersey number -->
+          <text x="67" y="83" font-size="13" fill="white" font-weight="bold" font-family="Arial, sans-serif">23</text>
+          <!-- Jersey side stripe -->
+          <line x1="60" y1="75" x2="88" y2="73" stroke="white" stroke-width="1.5" opacity="0.4"/>
+
+          <!-- Player arms reaching up -->
+          <path d="M62,70 Q50,58 46,48" stroke="#C8102E" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M86,68 Q100,54 108,44" stroke="#C8102E" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <!-- Hands -->
+          <circle cx="45" cy="46" r="7" fill="url(#bb-skin)"/>
+          <circle cx="109" cy="42" r="7" fill="url(#bb-skin)"/>
+
+          <!-- Player head -->
+          <circle cx="74" cy="54" r="14" fill="url(#bb-skin)"/>
+          <!-- Headband -->
+          <path d="M61,51 Q74,44 87,51" fill="none" stroke="#C8102E" stroke-width="3.5"/>
+          <!-- Eyes (intense) -->
+          <circle cx="70" cy="54" r="2.2" fill="#2A1A00"/>
+          <circle cx="78" cy="54" r="2.2" fill="#2A1A00"/>
+          <path d="M68,51 L73,52" stroke="#2A1A00" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M75,52 L80,51" stroke="#2A1A00" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M70,59 Q74,57 78,59" fill="none" stroke="#2A1A00" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Ball -->
+          <circle cx="78" cy="26" r="17" fill="url(#bb-ball)"/>
+          <!-- Ball seam lines -->
+          <path d="M63,23 Q78,15 93,23" fill="none" stroke="#8B3E00" stroke-width="2"/>
+          <path d="M63,29 Q78,37 93,29" fill="none" stroke="#8B3E00" stroke-width="2"/>
+          <line x1="78" y1="9" x2="78" y2="43" stroke="#8B3E00" stroke-width="2"/>
+          <!-- Ball shine highlight -->
+          <ellipse cx="70" cy="19" rx="6" ry="4" fill="white" opacity="0.28" transform="rotate(-20,70,19)"/>
+        </svg>
+        <span class="character-label">Slam dunk! 🏀</span>
+      </div>
+
+      <!-- ──────────────────────────── AFL FOOTBALL CHARACTER -->
+      <div class="character-wrap" data-sport="football">
+        <svg viewBox="0 0 220 155" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="afl-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5BAAD8"/><stop offset="100%" stop-color="#A8D8F0"/>
+            </linearGradient>
+            <linearGradient id="afl-field" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2A8A30"/><stop offset="100%" stop-color="#1A5E20"/>
+            </linearGradient>
+            <linearGradient id="afl-ball" x1="20%" y1="20%" x2="80%" y2="80%">
+              <stop offset="0%" stop-color="#A0722A"/><stop offset="100%" stop-color="#4A2A08"/>
+            </linearGradient>
+            <linearGradient id="afl-skin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F5C890"/><stop offset="100%" stop-color="#D4A062"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Sky -->
+          <rect width="220" height="96" fill="url(#afl-sky)" rx="10 10 0 0"/>
+          <!-- Clouds -->
+          <ellipse cx="40" cy="22" rx="20" ry="8" fill="white" opacity="0.65"/>
+          <ellipse cx="55" cy="19" rx="13" ry="7" fill="white" opacity="0.65"/>
+          <ellipse cx="28" cy="21" rx="11" ry="6" fill="white" opacity="0.55"/>
+          <ellipse cx="175" cy="15" rx="18" ry="7" fill="white" opacity="0.5"/>
+
+          <!-- Field -->
+          <path d="M0,96 L220,96 L220,155 L0,155 Z" fill="url(#afl-field)"/>
+          <!-- Field stripe pattern -->
+          <rect x="0" y="96" width="40" height="59" fill="#248028" opacity="0.3"/>
+          <rect x="80" y="96" width="40" height="59" fill="#248028" opacity="0.3"/>
+          <rect x="160" y="96" width="40" height="59" fill="#248028" opacity="0.3"/>
+          <!-- Field white line -->
+          <line x1="0" y1="96" x2="220" y2="96" stroke="white" stroke-width="2.5"/>
+          <!-- 50m arc -->
+          <path d="M0,145 Q110,64 220,145" fill="none" stroke="white" stroke-width="1.5" opacity="0.35"/>
+          <!-- Centre circle suggestion -->
+          <ellipse cx="60" cy="130" rx="25" ry="8" fill="none" stroke="white" stroke-width="1.5" opacity="0.25"/>
+
+          <!-- AFL Goal posts — 4 posts (2 tall centre, 2 shorter behind) -->
+          <!-- Centre posts (tall) -->
+          <rect x="170" y="8" width="5" height="90" rx="2.5" fill="#F5D000" stroke="#D4A800" stroke-width="1.2"/>
+          <rect x="187" y="8" width="5" height="90" rx="2.5" fill="#F5D000" stroke="#D4A800" stroke-width="1.2"/>
+          <!-- Post top caps -->
+          <rect x="169" y="5" width="7" height="6" rx="3" fill="#E8C000"/>
+          <rect x="186" y="5" width="7" height="6" rx="3" fill="#E8C000"/>
+          <!-- Behind posts (shorter, outer) -->
+          <rect x="156" y="26" width="4" height="72" rx="2" fill="#F5D000" stroke="#D4A800" stroke-width="0.8" opacity="0.85"/>
+          <rect x="202" y="26" width="4" height="72" rx="2" fill="#F5D000" stroke="#D4A800" stroke-width="0.8" opacity="0.85"/>
+          <rect x="155" y="23" width="6" height="5" rx="2.5" fill="#E8C000" opacity="0.85"/>
+          <rect x="201" y="23" width="6" height="5" rx="2.5" fill="#E8C000" opacity="0.85"/>
+          <!-- Score indication between posts (slight glow) -->
+          <rect x="175" y="10" width="12" height="88" fill="#FFEE00" opacity="0.04"/>
+
+          <!-- Player shadow -->
+          <ellipse cx="68" cy="124" rx="30" ry="7" fill="#185018" opacity="0.5"/>
+
+          <!-- Player left leg (planted support) -->
+          <path d="M60,96 L53,114 L51,132 L61,132 L63,114 L68,98 Z" fill="#001E62" stroke="#001050" stroke-width="1.2"/>
+          <!-- Left boot -->
+          <path d="M48,130 Q50,140 63,140 Q67,140 67,135 L61,130 Z" fill="#C8A020" stroke="#A08010" stroke-width="1.5"/>
+          <!-- Boot laces -->
+          <line x1="52" y1="136" x2="66" y2="136" stroke="#8B6010" stroke-width="1"/>
+          <line x1="54" y1="133" x2="62" y2="133" stroke="#8B6010" stroke-width="1"/>
+
+          <!-- Player right leg (kicking leg extended) -->
+          <path d="M72,93 L92,77 L108,75 L110,83 L95,87 L82,103 Z" fill="#001E62" stroke="#001050" stroke-width="1.2"/>
+          <!-- Right boot (at ball impact) -->
+          <path d="M104,73 Q114,69 118,77 Q114,84 105,83 Z" fill="#C8A020" stroke="#A08010" stroke-width="1.5"/>
+
+          <!-- Player jersey (Navy & Gold AFL style) -->
+          <path d="M55,64 Q53,78 57,96 Q65,103 77,99 Q85,86 83,64 Z" fill="#001E62" stroke="#001050" stroke-width="1.5"/>
+          <!-- Jersey V-neck yoke (gold) -->
+          <path d="M63,65 L68,73 L73,65" fill="#F5D000" stroke="#D4A800" stroke-width="1"/>
+          <!-- Jersey number -->
+          <text x="59" y="88" font-size="14" fill="#F5D000" font-weight="bold" font-family="Arial, sans-serif">8</text>
+          <!-- Side stripe -->
+          <path d="M55,78 L83,76" stroke="#F5D000" stroke-width="2" opacity="0.5"/>
+
+          <!-- Player arms (forward leaning) -->
+          <path d="M55,72 Q43,66 38,58" stroke="#001E62" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <path d="M83,70 Q97,62 103,54" stroke="#001E62" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <!-- Hands -->
+          <circle cx="37" cy="57" r="7" fill="url(#afl-skin)"/>
+          <circle cx="104" cy="52" r="7" fill="url(#afl-skin)"/>
+
+          <!-- Player head -->
+          <circle cx="69" cy="54" r="14" fill="url(#afl-skin)"/>
+          <!-- Hair -->
+          <path d="M56,50 Q69,38 82,50 Q82,43 69,40 Q56,43 56,50 Z" fill="#2A1400"/>
+          <!-- Eyes (determined) -->
+          <circle cx="65" cy="53" r="2.2" fill="#2A1400"/>
+          <circle cx="73" cy="53" r="2.2" fill="#2A1400"/>
+          <path d="M63,50 L68,51" stroke="#2A1400" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M70,51 L75,50" stroke="#2A1400" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M65,58 Q69,56 73,58" fill="none" stroke="#2A1400" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Mouthguard hint -->
+          <path d="M64,61 Q69,63 74,61" fill="none" stroke="#E0E0E0" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+          <!-- AFL oval ball (rotated in flight) -->
+          <g transform="translate(125,48) rotate(-28)">
+            <ellipse cx="0" cy="0" rx="19" ry="11" fill="url(#afl-ball)"/>
+            <!-- Ball lacing / seam -->
+            <line x1="-8" y1="0" x2="8" y2="0" stroke="#C8A060" stroke-width="2.5"/>
+            <line x1="-4" y1="-4" x2="-4" y2="4" stroke="#C8A060" stroke-width="1.5"/>
+            <line x1="0" y1="-5.5" x2="0" y2="5.5" stroke="#C8A060" stroke-width="1.5"/>
+            <line x1="4" y1="-4" x2="4" y2="4" stroke="#C8A060" stroke-width="1.5"/>
+            <path d="M-17,2 Q0,8 17,2" fill="none" stroke="#6A3A12" stroke-width="1.5"/>
+            <path d="M-17,-2 Q0,-8 17,-2" fill="none" stroke="#6A3A12" stroke-width="1.5"/>
+            <!-- Ball shine -->
+            <ellipse cx="-5" cy="-4" rx="5" ry="3" fill="white" opacity="0.22" transform="rotate(25,-5,-4)"/>
+          </g>
+
+          <!-- Ball trajectory arc -->
+          <path d="M112,55 Q140,18 178,28" fill="none" stroke="#F5D000" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.75"/>
+
+          <!-- Kick impact stars -->
+          <text x="108" y="80" font-size="14" fill="#FFD700" opacity="0.85">✦</text>
+          <text x="116" y="69" font-size="9" fill="#FFD700" opacity="0.6">✦</text>
+          <text x="103" y="68" font-size="7" fill="#FFD700" opacity="0.5">✦</text>
+        </svg>
+        <span class="character-label">Goal! 🏉</span>
+      </div>
+
+    </div><!-- /character-stage -->
+
+    <!-- Question -->
+    <div class="question-card">
+      <p id="question-text">Loading question...</p>
+    </div>
+
+    <!-- Answers -->
+    <div class="answers-grid">
+      <button class="answer-btn"></button>
+      <button class="answer-btn"></button>
+      <button class="answer-btn"></button>
+      <button class="answer-btn"></button>
+    </div>
+
+    <!-- Feedback -->
+    <div id="feedback-box" class="feedback-box correct-fb" hidden>
+      <span id="feedback-text"></span>
+    </div>
+
+    <!-- Next -->
+    <button class="btn-next" id="btn-next" hidden>Next Question →</button>
+
+  </div><!-- /screen-game -->
+
+
+  <!-- ═══════════════════════════════════════════════════ LEVEL COMPLETE -->
+  <div id="screen-level" hidden>
+    <p class="lc-title">🎉 Level <span id="lc-level">1</span> Complete!</p>
+    <div class="lc-stars" id="lc-stars">⭐⭐⭐</div>
+    <p class="lc-info" id="lc-score">5/5 correct</p>
+    <p class="lc-next">Get ready for Level <span id="lc-next-level">2</span>…</p>
+    <button class="btn-continue" id="btn-continue">Let's go! 🚀</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ END SCREEN -->
+  <div id="screen-end" hidden>
+    <span class="end-trophy" id="end-trophy">🥇</span>
+    <h2 class="end-title" id="end-title">Maths Champion</h2>
+    <div class="end-score-wrap">
+      <div class="end-big" id="end-score">150</div>
+      <div class="end-sub">points</div>
+      <div class="end-sub" id="end-pct" style="margin-top:4px;font-weight:700;font-size:1.1rem;color:var(--primary)"></div>
+    </div>
+    <p class="end-msg" id="end-msg">Amazing work! You're a superstar!</p>
+    <div class="end-btns">
+      <button class="btn-outline" id="btn-replay">Change settings</button>
+      <button class="btn-filled" id="btn-replay2">Play again! 🔄</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script src="js/questions.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
