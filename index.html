@@ -518,6 +518,31 @@
       <div class="end-sub" id="end-pct" style="margin-top:4px;font-weight:700;font-size:1.1rem;color:var(--primary)"></div>
     </div>
     <p class="end-msg" id="end-msg">Amazing work! You're a superstar!</p>
+
+    <!-- Name entry -->
+    <div class="lb-entry-row">
+      <input type="text" id="lb-name-input" class="lb-name-input"
+             placeholder="Enter your name…" maxlength="20" autocomplete="off"/>
+      <button class="lb-save-btn" id="lb-save-btn">Save Score</button>
+    </div>
+
+    <!-- Leaderboard (revealed after saving) -->
+    <div id="leaderboard-section" hidden>
+      <h3 class="lb-heading">🏆 Top 10 Leaderboard</h3>
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th class="lb-th-rank">#</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Game</th>
+            <th class="lb-th-date">Date</th>
+          </tr>
+        </thead>
+        <tbody id="lb-tbody"></tbody>
+      </table>
+    </div>
+
     <div class="end-btns">
       <button class="btn-outline" id="btn-replay">Change settings</button>
       <button class="btn-filled" id="btn-replay2">Play again! 🔄</button>

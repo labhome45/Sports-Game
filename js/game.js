@@ -195,6 +195,30 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-replay2').addEventListener('click', () => {
     startGame();
   });
+
+  // Leaderboard save
+  const nameInput = document.getElementById('lb-name-input');
+  const saveBtn   = document.getElementById('lb-save-btn');
+
+  saveBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.classList.add('input-error');
+      nameInput.focus();
+      return;
+    }
+    lbSave(name);
+    saveBtn.disabled = true;
+    saveBtn.textContent = '✓ Saved!';
+    lbRender(name);
+  });
+
+  nameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') saveBtn.click();
+  });
+  nameInput.addEventListener('input', () => {
+    nameInput.classList.remove('input-error');
+  });
 });
 
 // ── Level complete screen ─────────────────────────────────────────
@@ -215,15 +239,74 @@ function showEndScreen() {
   document.getElementById('end-pct').textContent = pct + '%';
   const trophy = pct >= 80 ? '🥇' : pct >= 50 ? '🥈' : '🥉';
   document.getElementById('end-trophy').textContent = trophy;
-  const msgs = {
-    maths: 'Maths Champion', english: 'English Expert', stem: 'STEM Star'
-  };
+  const msgs = { maths: 'Maths Champion', english: 'English Expert', stem: 'STEM Star' };
   document.getElementById('end-title').textContent = msgs[state.subject] || 'Great effort!';
   const encouragement = pct >= 80
     ? 'Amazing work! You\'re a superstar!'
-    : pct >= 50
-    ? 'Great effort! Keep practising!'
+    : pct >= 50 ? 'Great effort! Keep practising!'
     : 'Good try! Play again to improve!';
   document.getElementById('end-msg').textContent = encouragement;
+
+  // Reset leaderboard entry section for each new game
+  const nameInput = document.getElementById('lb-name-input');
+  const saveBtn   = document.getElementById('lb-save-btn');
+  nameInput.value = '';
+  nameInput.classList.remove('input-error');
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Save Score';
+  document.getElementById('leaderboard-section').hidden = true;
+
   show('screen-end');
+  nameInput.focus();
+}
+
+// ── Leaderboard (localStorage) ────────────────────────────────────
+const LB_KEY = 'sportSmartLeaderboard';
+
+function lbGet() {
+  try { return JSON.parse(localStorage.getItem(LB_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function lbSave(name) {
+  const SPORT_LABEL  = { bike: '🏍️', basketball: '🏀', football: '🏉' };
+  const SUBJ_LABEL   = { maths: '🔢', english: '📖', stem: '🔬' };
+  const YEAR_LABEL   = { f2: 'F–2', '34': 'Yr 3–4', '56': 'Yr 5–6' };
+  const scores = lbGet();
+  scores.push({
+    name: htmlEscape(name.trim() || 'Anonymous'),
+    score: state.score,
+    meta: `${SUBJ_LABEL[state.subject] || ''} ${SPORT_LABEL[state.sport] || ''}`,
+    year: YEAR_LABEL[state.yearGroup] || '',
+    date: new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }),
+  });
+  scores.sort((a, b) => b.score - a.score);
+  localStorage.setItem(LB_KEY, JSON.stringify(scores.slice(0, 50)));
+  return scores;
+}
+
+function lbRender(highlightName) {
+  const scores = lbGet();
+  const top10  = scores.slice(0, 10);
+  const MEDALS = ['🥇', '🥈', '🥉'];
+
+  document.getElementById('lb-tbody').innerHTML = top10.length
+    ? top10.map((e, i) => {
+        const isNew = e.name === htmlEscape(highlightName.trim()) && e.score === state.score;
+        const cls   = isNew ? 'lb-new' : (i < 3 ? 'lb-top-3' : '');
+        return `<tr class="${cls}">
+          <td class="lb-rank">${MEDALS[i] || (i + 1)}</td>
+          <td class="lb-name">${e.name}</td>
+          <td class="lb-score">${e.score}</td>
+          <td class="lb-meta">${e.meta}</td>
+          <td class="lb-date">${e.date}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="5" class="lb-empty">No scores yet — be the first!</td></tr>';
+
+  document.getElementById('leaderboard-section').hidden = false;
+}
+
+function htmlEscape(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
